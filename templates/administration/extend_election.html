@@ -1,0 +1,17 @@
+{% extends "index_administration.html" %}
+{% load static %}
+{% block index_administration %}
+<div class="container">
+    {% include "tags/message.html" %}
+    <form action="" method="post" class="mb-5 mt-4">
+        {% csrf_token %}
+        <div class="col mb-3">
+            <div>
+                <label for="end_date" class="form-label">Date de fin</label>
+                <input type="datetime-local" class="form-control" id="end_date" name="end_date"
+                    value='{{ election.end_date }}' required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Sauvegarder</button>
+    </form>
+    {% endblock index_administration %}

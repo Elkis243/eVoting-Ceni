@@ -1,0 +1,5 @@
+{% if messages %}
+{% for message in messages %}
+<div class="alert fs-6 {{message.tags}} return-message fw-bold" id='alert'><i class="bi bi-chat-left fs-3"></i> {{message}}</div>
+{% endfor %}
+{% endif %}

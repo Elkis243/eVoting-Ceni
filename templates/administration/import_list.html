@@ -1,0 +1,13 @@
+{% extends "index_administration.html" %}
+{% load static %}
+{% block index_administration %}
+<h6 class='mb-4'>Importation de la liste électorale</h6>
+{% include "tags/message.html" %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <input type="file" name="excel_file" class='form-control' required>
+    </div>
+    <button type="submit" class='btn btn-primary'>Importer</button>
+</form>
+{% endblock index_administration %}

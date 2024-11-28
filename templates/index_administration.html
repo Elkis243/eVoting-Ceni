@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+<header class="navbar navbar-dark sticky-top flex-md-nowrap p-2 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 fs-6 px-3" href=""><img src="{% static 'images/favicon.ico' %}"
+            class='img-fluid' height='30' width='30'> Ceni eVoting</a>
+    <button class="navbar-toggler position-absolute d-md-none" type="button" data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column mt-2">
+                    <li class='nav-item'>
+                        <a href="{% url 'election' %}"
+                            class="nav-link fs-6 text-secondary {% if name == 'election' %}link_active{% endif %}">
+                            <i class="bi bi-calendar4"></i> Election
+                        </a>
+                    </li>
+                    <li class='nav-item'>
+                        <a href="{% url 'deconnexion' %}" class="nav-link fs-6 text-secondary">
+                            <i class="bi bi-power"></i> Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="col-md-8 ms-sm-auto col-lg-10 px-md-4">
+            <div class="container mt-4">
+                {% block index_administration %}
+                {% endblock index_administration %}
+            </div>
+        </main>
+    </div>
+</div>
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}" defer></script>
+{% endblock content %}

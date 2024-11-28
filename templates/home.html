@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+<div>
+    <div class="row">
+        <div class="col-md-5 row-bg">
+            <div class="container d-flex mx-4 mt-4">
+                <img src="{% static 'images/favicon.png' %}" height='30' width='30'>
+                <a href="" class='text-decoration-none mt-2 mx-2 text-white logo-text fs-6 fw-medium'>Ceni eVoting</a>
+            </div>
+            <div class="container mx-3 context-text d-flex align-items-center">
+                <div class="container">
+                    <h3 class='text-white mb-4 Welcome-text'></h3>
+                    <p class='text-white'>
+                        Bienvenue sur votre plateforme de vote en ligne. Exprimez votre voix et participez activement à
+                        la démocratie en votant depuis le confort de votre domicile.
+                        Avec notre système sécurisé et fiable, vous pouvez participer aux élections de manière simple et
+                        rapide.
+                    </p>
+                    <a href="{% url "signin" %}" class='btn btn-primary me-2'>Connexion</a>
+                    <a href="{% url "elector_code_verification" %}" class='btn btn-primary'>Inscription</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 position-relative bg-white">
+            <div class="container d-flex justify-content-center">
+                <img src="{% static 'images/img1.png' %}" class="img-fluid mt-5" height='550' width='550'>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

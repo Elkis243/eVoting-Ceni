@@ -1,0 +1,93 @@
+{% extends "index_elector.html" %}
+{% load static %}
+{% block index_elector  %}
+{% if election.status == 'published' %}
+<h6><i class="bi bi-bookmark-check fs-4"></i> Tableau de bord</h6>
+<div class="container mt-3 mb-5">
+    <div class="row">
+        <div class="col-md-6 p-2">
+            <div class="container bg-box p-4 rounded-3">
+                <p class='fw-medium mb-5'>Résultat général</p>
+                {% for candidate in resultat_pourcentage %}
+                <div class="container p-2">
+                    <div class="row">
+                        <div class="col-1 mx-4">
+                            <img src="{{ candidate.picture_url }}" width="50" height="50" class="rounded-circle"
+                                alt="{{ candidate.first_name }} {{ candidate.last_name }}">
+                        </div>
+                        <div class="col-9">
+                            <div class="d-flex justify-content-between">
+                                <div class="item">
+                                    <div class='mb-3'>
+                                        <p class='mb-1 fw-medium'>{{ candidate.name }} {{ candidate.last_name }}
+                                            {{ candidate.first_name }}</p>
+                                    </div>
+                                    <div class="item">
+                                        <small class='text-secondary'>
+                                            {{ candidate.votes }}
+                                            <small
+                                                class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'>Votes</small>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <small class='alert alert-primary p-2 text-primary fw-bolder border-0 h5'>
+                                        {{ candidate.percentage|floatformat:1 }}%
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="item mt-4">
+                                <div class="progress" role="progressbar" aria-label="Progress bar"
+                                    aria-valuenow="{{ candidate.percentage|floatformat:0 }}" aria-valuemin="0"
+                                    aria-valuemax="100" style="height: 6px;">
+                                    <div class="progress-bar" style="width: {{ candidate.percentage|floatformat:0 }}%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6 p-2 scroll-div">
+            <div class="container bg-box p-4 rounded-3">
+                <p class="fw-medium mb-5">Répartition par pays</p>
+                {% for pays, resultats in votes_pays.items %}
+                <div class="container mt-4">
+                    <p class="fw-medium"><i class="bi bi-geo-alt"></i> {{ pays | capfirst }}</p>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-group">
+                                {% for candidat in resultats %}
+                                <li class="list-group-item d-flex align-items-center">
+                                    {% if candidat.picture_url %}
+                                    <img src="{{ candidat.picture_url }}" alt="{{ candidat.name }}" width="50"
+                                        height="50" class="rounded-circle me-3">
+                                    {% else %}
+                                    <img src="default_image_url" alt="No image" width="50" height="50"
+                                        class="rounded-circle me-3">
+                                    {% endif %}
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>{{ candidat.name }} {{ candidat.last_name }}
+                                            {{ candidat.first_name }}</span>
+                                        <span class="badge bg-primary">{{ candidat.votes }} votes</span>
+                                        <span class="badge bg-secondary">{{ candidat.percentage|floatformat:2 }}%</span>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                <li class="list-group-item">Aucun vote enregistré.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock index_elector %}

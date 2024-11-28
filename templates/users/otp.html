@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+<div class='container d-flex justify-content-center align-items-center content-otp'>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{% static 'images/auth.png' %}" class='img-fluid'>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-info">
+                    Cher Utilisateur,
+                    Nous sommes ravis de vous informer qu'un code a été envoyé à votre adresse email enregistrée.
+                    Veuillez le saisir dans le champ prévu à cet effet. Ce code est valable pour les prochaines 5
+                    minutes.
+                </div>
+                {% include "tags/message.html" %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="otp" class='form-label'>Code de confirmation</label>
+                        <input type="text" class='form-control' id='otp' name='otp' maxlength='6' minlength='6'
+                            pattern="[0-9]+" required>
+                    </div>
+                    <button type='submit' class='btn btn-primary mb-3 w-100'>Confirmer</button>
+                    <a href="{% url "signin_otp_resend" %}" class='float-end text-decoration-none'><i class="bi bi-send"></i>
+                        réenvoyer</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

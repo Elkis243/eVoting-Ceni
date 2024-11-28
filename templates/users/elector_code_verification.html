@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+<div class='container d-flex justify-content-center align-items-center content-signup'>
+    {% if created_election_exist %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{% static 'images/img3.png' %}" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-info mb-4">
+                    Cher electeur,
+                    pour compléter votre inscription, nous vous prions de saisir votre numéro national dans le champ
+                    ci-dessous.
+                    Ce numéro nous permettra de vérifier votre identité et de vous enregistrer pour participer aux
+                    élections.
+                </div>
+                {% include "tags/message.html" %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="national_number" class='form-label'>Numero national</label>
+                        <input type="text" class='form-control' id='national_number' name='national_number'
+                            minlength='11' maxlength='11' pattern="[0-9]+" required>
+                    </div>
+                    <button class='btn btn-primary mb-3 w-100'>Envoyer</button>
+                    <a href="{% url "signin" %}" class='float-end text-decoration-none'><i class="bi bi-lock"></i>
+                        Connexion</a>
+                </form>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% url "home" as home %}
+    {% include "tags/no_message.html" with home=home %}
+    {% endif %}
+</div>
+{% endblock content %}

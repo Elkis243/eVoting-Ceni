@@ -1,0 +1,23 @@
+{% extends "index_elector.html" %}
+{% load static %}
+{% block index_elector %}
+<div class="container">
+    {% include "tags/message.html" %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="col mb-3">
+            <label for="numero_national" class='form-label'>Code de référence de vote</label>
+            <textarea name="vote_evidence" id="" class='form-control'></textarea>
+        </div>
+        <div class="col mb-3">
+            <label for="election" class='form-label'>historique election</label>
+            <select class='form-select' name="election" id="election" required>
+                {% for item in elections %}
+                <option value="{{item.pk}}">{{item.election_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class='btn btn-primary w-100'>Vérification</button>
+    </form>
+</div>
+{% endblock index_elector %}

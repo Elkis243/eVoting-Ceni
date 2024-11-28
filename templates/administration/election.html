@@ -1,0 +1,136 @@
+{% extends "index_administration.html" %}
+{% load static %}
+{% load tz %}
+{% load tz_detect %}
+{% block index_administration %}
+{% include "tags/message.html" %}
+{% if no_existing_election %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+    data-bs-whatever="@getbootstrap"><i class="bi bi-calendar-check fs-4"></i> Démarrer une session</button>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6 fw-bolder" id="staticBackdropLabel"><i
+                        class="bi bi-shield-exclamation fs-3"></i>
+                    Nouvelle session</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action='' method='POST'>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">Date de début</label>
+                        <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                    </div>
+                    <div class=>
+                        <label for="end_date" class="form-label">Date de fin</label>
+                        <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if election_exist %}
+{% for index in elections %}
+<div class="card mt-4">
+    <div class="card-header p-3">
+        <div class="d-flex justify-content-between">
+            <div class="item d-flex flex-row">
+                <div class="title-election mx-2">
+                    <h6>{{index.election_name | capfirst }}</h6>
+                </div>
+                <div class="status-election">
+                    {% if index.status == 'created' %}
+                    <span class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'><i
+                            class="bi bi-clock-history"></i> En attente</span>
+                    {% elif index.status == 'active' %}
+                    <span class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'><i
+                            class="bi bi-clock-history"></i> En cours</span>
+                    {% elif index.status == 'closed' %}
+                    <span class='alert alert-danger p-2 text-danger border-0 span-badge fw-medium'><i
+                            class="bi bi-clock-history"></i> Fermée</span>
+                    {% elif index.status == 'published' %}
+                    <span class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'><i
+                            class="bi bi-check2-all"></i> Publiée</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="item d-flex flex-row">
+                <div class="count mx-2">
+                    <span
+                        class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'>{{index.electors_count|default:0}}
+                        Inscription</span>
+                    <span
+                        class='alert alert-primary p-2 text-primary border-0 span-badge fw-medium'>{{index.candidates_count|default:0}}
+                        Candidat</span>
+                </div>
+                <div class="electio-date">
+                    Début : {{ index.start_date|date:"d F Y à H:i" }} {% tz_detect %}
+                    Au
+                    Fin : {{ index.end_date|date:"d F Y à H:i" }} {% tz_detect %}
+                    {% tz_detect %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div class="left-action">
+                <a href="{% url "consult_election" index.pk %}" class='btn btn-primary'>Consulter <i
+                        class="bi bi-arrow-right"></i></a>
+                {% if index.status == 'created' %}
+                <a href="{% url 'edit_election' index.pk %}" class="btn btn-primary">Editer</a>
+                {% url "active_election" index.pk  as votingActivationLink %}
+                {% include "tags/modal.html" with id="staticBackdropActivated" link=votingActivationLink %}
+                <button type="button"
+                    class="btn btn-primary {% if index.candidates_count < 2 or index.electors_count < 2 %}disabled{% endif %}"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdropActivated{{index.pk}}">Activer</button>
+                {% url "cancel_election" index.pk as votingCancellationLink%}
+                {% include "tags/modal.html" with id="staticBackdropCancelled" link=votingCancellationLink %}
+                <button type="button" class="btn btn-danger " data-bs-toggle="modal"
+                    data-bs-target="#staticBackdropCancelled{{index.pk}}">Annuler</button>
+                {% elif index.status == 'active' %}
+                {% url "close_election" index.pk  as votingClosingLink %}
+                {% include "tags/modal.html" with id="staticBackdropClosed" link=votingClosingLink %}
+                <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                    data-bs-target="#staticBackdropClosed{{index.pk}}">Clôturer</button>
+                <a href="{% url 'extend_election' index.pk %}" class="btn btn-primary">Prolonger</a>
+                {% elif index.status == 'closed' %}
+                {% url "published_voting" index.pk  as VotingPublisingLink %}
+                {% include "tags/modal.html" with id="staticBackdropPublished" link=VotingPublisingLink %}
+                <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                    data-bs-target="#staticBackdropPublished{{index.pk}}"> Publiér</button>
+                {% endif %}
+            </div>
+            <div class="right-action">
+                {% if index.status == 'created' %}
+                {% if count_list_electoral == 0 %}
+                <a href="{% url "import_list" index.pk %}" class="btn btn-primary float-end"><i
+                        class="bi bi-cloud-upload"></i> Importer le fichier électorale</a>
+                {% endif %}
+                {% if count_list_electoral > 0 %}
+                <a href="{% url "candidate" index.pk %}" class="btn btn-primary float-end mx-2">Nouveau candidat</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="d-flex justify-content-center align-items-center content-signup">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <img src="{% static 'images/no_data.png' %}" class="img-fluid" height="300" width="300" alt="No Data Available">
+        <p class="text-center mt-2">Aucune information sur l'élection n'est actuellement disponible.<br>Cliquez sur le
+            bouton ci-dessus pour une nouvelle élection</p>
+    </div>
+</div>
+{% endif %}
+{% endblock index_administration %}

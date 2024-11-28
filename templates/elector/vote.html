@@ -1,0 +1,73 @@
+{% extends "index_elector.html" %}
+{% load static %}
+{% load tz %}
+{% load tz_detect %}
+{% block index_elector %}
+{% tz_detect %}
+{% include 'tags/message.html' %}
+{% if active_election_exist %}
+{% if voted %}
+<div class="d-flex justify-content-center align-items-center content-signup">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="item-img">
+            <img src="{% static 'images/Secure Server-bro.png' %}" class="img-fluid" height="300" width="300">
+        </div>
+        <div class="item-text w-100">
+            <p class="text-center mt-2">Merci d'avoir participé ! Votre vote a été enrégistré le
+                {{timestamp|date:"d F Y à H:i" }} {% tz_detect %}<br> Veuillez
+                vérifier
+                les résultats dans l'onglet historique.</p>
+        </div>
+    </div>
+</div>
+{% else %}
+<div>
+    <div class="d-flex flex-row-reverse">
+        <div class="p-2">
+            Début : {{ election.start_date|date:"d F Y à H:i" }}
+            Au
+            Fin : {{ election.end_date|date:"d F Y à H:i" }}
+            {% tz_detect %}
+        </div>
+    </div>
+    {% for index in candidates  %}
+    <div class="d-flex justify-content-between">
+        <div class="p-2 d-flex">
+            <img src="{{index.picture.url}}" width="60" height="60" class="rounded-circle">
+            <div class="p-2">
+                <p class='mb-1 fs-6 fw-bolder '>{{index.first_name|capfirst}} {{index.name|capfirst}}</p>
+                <p class='text-secondary'>{{index.party}}</p>
+            </div>
+        </div>
+        <div>
+            {% url "choice_candidate" index.pk  as ballotLink %}
+            {% include 'tags/modal.html' with  id="staticBackdropballotLink" link=ballotLink %}
+            <button type="button" class="btn btn-primary position-relative btn-delete-candidate" data-bs-toggle="modal"
+                data-bs-target="#staticBackdropballotLink{{index.pk}}"> <i class="bi bi-arrow-left"></i> Voter pour ce
+                candidat</button>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="d-flex justify-content-between">
+        <div class="p-2 d-flex">
+            <img src="{% static 'images/user.jpg' %}" width="50" height="50" class="rounded-circle">
+            <div class="p-2">
+                <p class='mb-1 fs-6 fw-bolder '>Aucun choix</p>
+                <p class='text-secondary'>Vote blanc</p>
+            </div>
+        </div>
+        <div>
+            {% url "choice_white_vote" as WhiteballotLink %}
+            {% include 'tags/modal.html' with  id="staticBackdropWhiteballotLink" link=WhiteballotLink %}
+            <button type="button" class="btn btn-primary position-relative btn-delete-candidate" data-bs-toggle="modal"
+                data-bs-target="#staticBackdropWhiteballotLink">
+                <i class="bi bi-arrow-left"></i> Vote blanc
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% else %}
+{% include "tags/no_message.html" with viewingButton='d-none'%}
+{% endif %}
+{% endblock index_elector %}

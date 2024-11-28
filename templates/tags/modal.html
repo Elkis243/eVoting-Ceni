@@ -1,0 +1,20 @@
+<div class="modal fade" id="{{id}}{{index.pk}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6 fw-bolder" id="staticBackdropLabel"><i
+                        class="bi bi-shield-exclamation fs-3"></i> Confirmation requise</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Vous êtes sur le point d'exécuter une action sensible qui pourrait avoir des conséquences significatives
+                sur le système.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <a type="button" class="btn btn-primary" href="{{link}}">Je confirme</a>
+            </div>
+        </div>
+    </div>
+</div>

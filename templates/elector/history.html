@@ -1,0 +1,33 @@
+{% extends "index_elector.html" %}
+{% load static %}
+{% load tz %}
+{% block index_elector %}
+{% for index in elections %}
+<div class="card mt-4">
+    <div class="card-header p-3">
+        <div class="d-flex justify-content-between">
+            <div class="item d-flex flex-row">
+                <div class="title-election mx-2">
+                    <h6>{{index.election_name | capfirst }}</h6>
+                </div>
+                <div class="election-status">
+                    <span class='alert alert-danger p-2 text-danger border-0 span-badge fw-medium'><i
+                            class="bi bi-clock-history"></i> Fermée</span>
+                </div>
+            </div>
+            <div class="item d-flex flex-row">
+                <div class="electio-date">
+                    {{ index.start_date|localtime}} Au {{ index.end_date|localtime}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <a href="{% url "view_result" index.pk %}" class='btn btn-primary'>Consulter <i
+                class="bi bi-arrow-right"></i></a>
+    </div>
+</div>
+{% empty %}
+{% include "tags/no_message.html" with viewingButton='d-none'%}
+{% endfor %}
+{% endblock index_elector %}

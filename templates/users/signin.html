@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+<div class="body-signin overflow-hidden">
+    <div class="container d-flex mx-4 mt-4">
+        <img src="{% static 'images/favicon.png' %}" height='30' width='30'>
+        <a href="{% url "home" %}" class='text-decoration-none mt-2 mx-2 text-dark logo-text fs-6 fw-medium'>Ceni
+            eVoting</a>
+    </div>
+    <div class="container d-flex justify-content-center align-items-center signin-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{% static 'images/phone.png' %}" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    {% include "tags/message.html" %}
+                    <form action="{% url "signin" %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class='form-label'>Adresse email</label>
+                            <input type="email" name="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class='form-label'>Mot de passe</label>
+                            <input type="password" name="password" id="password" class="form-control" maxlength='10'
+                                minlength='10' required>
+                        </div>
+                        <button type='submit' class='btn btn-primary w-100 mb-3'>Connexion</button>
+                        <a href="{% url "forgot_password" %}" class='float-end text-decoration-none'><i
+                                class="bi bi-lock"></i> Retrouver son mot de passe !</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

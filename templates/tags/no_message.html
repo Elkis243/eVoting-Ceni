@@ -1,0 +1,8 @@
+{% load static %}
+<div class="d-flex justify-content-center align-items-center content-signup">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <img src="{% static 'images/no_data.png' %}" class="img-fluid" height="300" width="300" alt="No Data Available">
+        <p class="text-center mt-2">Aucune information sur l'élection n'est disponible pour le moment.<br>Veuillez revenir ultérieurement.</p>
+        <a href="{{home}}" class="btn btn-primary mt-3 {{viewingButton}}"><i class="bi bi-arrow-left"></i> Retour</a>
+    </div>
+</div>
